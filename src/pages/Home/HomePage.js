@@ -26,7 +26,9 @@ export default function Home() {
     email: "",
     role: "",
     group: "",
-    policy: ""
+    policy: "",
+    account: "",
+    id: ""
   });
   const onSubmit = async (values) => {
     const url =
@@ -59,9 +61,6 @@ export default function Home() {
     if (!values.group) {
       errors.group = "Select a group";
     }
-    if (!values.policy) {
-      errors.policy = "Select a Policy";
-    }
     return errors;
   };
   const Condition = ({ when, is, children }) => (
@@ -74,7 +73,7 @@ export default function Home() {
       <CssBaseline />
       <Form
         onSubmit={onSubmit}
-        initialValues={{ role: "student" }}
+        initialValues={{ role: "student" , account: "existingid" , policy: "Policy1"}}
         validate={validate}
         render={({ handleSubmit, reset, submitting, pristine, values }) => (
           <form onSubmit={handleSubmit} noValidate>
@@ -205,6 +204,47 @@ export default function Home() {
                     </Field>
                   </Condition>
                 </Grid>
+                <Grid item xs={12}>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Where Do You want to create user</FormLabel>
+                    <RadioGroup row>
+                      <FormControlLabel
+                        label="Existing ID"
+                        control={
+                          <Field
+                            name="account"
+                            component={Radio}
+                            type="radio"
+                            value="existingid"
+                          />
+                        }
+                      />
+                      <FormControlLabel
+                        label="Create a new Account"
+                        control={
+                          <Field
+                            name="account"
+                            component={Radio}
+                            type="radio"
+                            value="newaccount"
+                          />
+                        }
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs = {12}>
+                  <Condition when="account" is="existingid">
+                    <Field
+                      fullWidth
+                      required
+                      name="id"
+                      component={TextField}
+                      type="text"
+                      label="Account ID"
+                    />
+                  </Condition>
+                </Grid>
                 <Grid item style={{ marginTop: 16 }}>
                   <Button
                     type="button"
@@ -227,6 +267,7 @@ export default function Home() {
                 </Grid>
               </Grid>
             </Paper>
+            <pre> {JSON.stringify(values,0,2)} </pre>
           </form>
         )}
       />
